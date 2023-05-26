@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "localhost에 대해 Chrome 시작",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "node",
+            "name": "현재 파일 실행",
+            "request": "launch",
+            "program": "${workspaceFolder}\\index.js"
+        }
+    ]
+}
