@@ -90,7 +90,15 @@ app.get('/qna', (req, res) => {
 app.get('/qna_dat', (req, res) => {
   connection.query('SELECT * from qna_dat', (error, rows) => {
     if (error) throw error;
-    console.log('User info is: ', rows);
+    console.log('qna: ', rows);
+    res.send(rows);
+  });
+});
+
+app.get('/transcaction', (req, res) => {
+  connection.query('SELECT * from transaction', (error, rows) => {
+    if (error) throw error;
+    console.log('transaction: ', rows);
     res.send(rows);
   });
 });
@@ -106,7 +114,7 @@ app.post('/qna_dat/get', (req, res) => {
       res.send("datgul sended.");
     }
   })
-})
+});
 
 app.post("/user/plus", (req, res) => {
   const userName = req.body.frontUserName;
@@ -123,7 +131,7 @@ app.post("/user/plus", (req, res) => {
       console.log("value inserted")
     }
   })
-})
+});
 
 app.post("/community/plus", (req, res) => {
   const user_userName = req.body.frontUser_userName;
@@ -222,6 +230,26 @@ app.post("/qna_dat/plus", (req, response) => {
   );
 });
 
+app.post("/transaction/plus", (req, response) => {
+  const seller_userName = req.body.frontSeller_userName;
+  const reptile_species = req.body.frontReptile_species;
+  const price = req.body.frontPrice;
+  const createDate = req.body.frontCreateDate;
+
+  connection.query(
+    "INSERT INTO community_dat (seller_userName, reptile_species, price, createDate) VALUES (?,?,?,?)",
+    [seller_userName, reptile_species, price, createDate],
+    //콜백함수
+    (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        response.send("value Inserted");
+      }
+    }
+  );
+});
+
 app.delete("/user/delete", (req, res) => {
   const id = req.body.frontId;
   connection.query(
@@ -305,6 +333,23 @@ app.delete("/qna_dat/delete", (req, res) => {
   )
 });
 
+app.delete("/transaction/delete", (req, res) => {
+  //res.header("Access-Control-Allow-Origin", "*");
+  const t_id = req.body.frontT_id;
+  connection.query(
+    "Delete from community where t_id=?;",
+    [t_id],
+    (err, respose) => {
+      if(err) {
+        console.log(err);
+      }
+      else {
+        res.send("value deleted");
+      }
+    }
+  )
+});
+
 app.post("/user/update", (req, res) => {
   const id = req.body.frontId;
   const userName = req.body.frontUserName;
@@ -352,6 +397,25 @@ app.post("/qna/update", (req, res) => {
   connection.query(
     "update community set q_title=?, q_contents=?, q_updateDate=? where q_id=?",
     [q_title, q_contents, q_updateDate, q_id],
+    (err, response) => {
+      if(err) {
+        console.log(err);
+      }
+      else {
+        res.send("value updated");
+      }
+    }
+  )
+});
+
+app.post("/transaction/update", (req, res) => {
+  const t_id = req.body.frontT_id;
+  const buyer_userName = req.body.frontBuyer_userName;
+  const completeDate = req.body.frontCompleteDate;
+
+  connection.query(
+    "update community set buyer_userName=?, completeDate=?, where t_id=?",
+    [buyer_userName, completeDate, t_id],
     (err, response) => {
       if(err) {
         console.log(err);
