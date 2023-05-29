@@ -10,7 +10,7 @@ let user_id = 1;
 const app = express();
 
 // configuration =========================
-app.set('port', process.env.PORT || 3001);
+app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json());
 
@@ -463,6 +463,6 @@ app.post("/qna/search", (req, res) => {
   //optionsSuccessStatus: 200,  // 응답 상태 200으로 설정
 //}))
 
-app.listen(3001, () => {
-  console.log('Express server listening on port 3001');
+app.listen(3000, () => {
+  console.log('Express server listening on port 3000');
 });
