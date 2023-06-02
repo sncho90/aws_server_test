@@ -66,6 +66,19 @@ app.get('/community_dat', (req, res) => {
   });
 });
 
+app.post('/community/detail', (req, res) => {
+  const c_id = req.body.frontC_id;
+  connection.query('select * from community where c_id=?',
+  [c_id],
+  (err, response) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send("detail sended.");
+    }
+  })
+});
+
 app.post('/community_dat/get', (req, res) => {
   const c_id = req.body.frontC_id;
   connection.query('select * from community_dat where c_id=?',
@@ -87,12 +100,38 @@ app.get('/qna', (req, res) => {
   });
 });
 
+app.post('/qna/detail', (req, res) => {
+  const q_id = req.body.frontQ_id;
+  connection.query('select * from qna where q_id=?',
+  [q_id],
+  (err, response) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send("detail sended.");
+    }
+  })
+});
+
 app.get('/qna_dat', (req, res) => {
   connection.query('SELECT * from qna_dat', (error, rows) => {
     if (error) throw error;
     console.log('qna: ', rows);
     res.send(rows);
   });
+});
+
+app.post('/qna_dat/get', (req, res) => {
+  const q_id = req.body.frontQ_id;
+  connection.query('select * from qna_dat where q_id=?',
+  [q_id],
+  (err, response) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send("datgul sended.");
+    }
+  })
 });
 
 app.get('/transcaction', (req, res) => {
