@@ -49,7 +49,7 @@ app.get('/user', (req, res) => {
   });
 });*/
 
-
+//게시글 전부 불러오기
 app.get('/community', (req, res) => {
   connection.query('SELECT * from community', (error, rows) => {
     if (error) throw error;
@@ -58,6 +58,7 @@ app.get('/community', (req, res) => {
   });
 });
 
+//게시글 댓글 전부 불러오기
 app.get('/community_dat', (req, res) => {
   connection.query('SELECT * from community_dat', (error, rows) => {
     if (error) throw error;
@@ -66,6 +67,7 @@ app.get('/community_dat', (req, res) => {
   });
 });
 
+//특정 게시물 보기
 app.post('/community/detail', (req, res) => {
   const c_id = req.body.frontC_id;
   connection.query('select * from community where c_id=?',
@@ -79,6 +81,7 @@ app.post('/community/detail', (req, res) => {
   })
 });
 
+//특정 게시물의 댓글들 보기
 app.post('/community_dat/get', (req, res) => {
   const c_id = req.body.frontC_id;
   connection.query('select * from community_dat where c_id=?',
@@ -92,6 +95,7 @@ app.post('/community_dat/get', (req, res) => {
   })
 });
 
+//qna전부 불러오기
 app.get('/qna', (req, res) => {
   connection.query('SELECT * from qna', (error, rows) => {
     if (error) throw error;
@@ -100,6 +104,7 @@ app.get('/qna', (req, res) => {
   });
 });
 
+//특정 qna글 보기
 app.post('/qna/detail', (req, res) => {
   const q_id = req.body.frontQ_id;
   connection.query('select * from qna where q_id=?',
@@ -113,6 +118,7 @@ app.post('/qna/detail', (req, res) => {
   })
 });
 
+//qna 댓글 전부 불러오기
 app.get('/qna_dat', (req, res) => {
   connection.query('SELECT * from qna_dat', (error, rows) => {
     if (error) throw error;
@@ -121,6 +127,7 @@ app.get('/qna_dat', (req, res) => {
   });
 });
 
+//특정 qna 댓글 보기
 app.post('/qna_dat/get', (req, res) => {
   const q_id = req.body.frontQ_id;
   connection.query('select * from qna_dat where q_id=?',
@@ -134,6 +141,7 @@ app.post('/qna_dat/get', (req, res) => {
   })
 });
 
+//거래 전부 불러오기
 app.get('/transaction', (req, res) => {
   connection.query('SELECT * from transaction', (error, rows) => {
     if (error) throw error;
@@ -142,6 +150,7 @@ app.get('/transaction', (req, res) => {
   });
 });
 
+//특정 거래 보기
 app.post('/transaction/get', (req, res) => {
   const t_id = req.body.frontT_id;
   connection.query('select * from transaction where t_id=?',
@@ -155,6 +164,7 @@ app.post('/transaction/get', (req, res) => {
   })
 });
 
+//유저 추가
 app.post("/user/plus", (req, res) => {
   const userName = req.body.frontUserName;
   const userPassword = req.body.frontUserPassword;
@@ -172,6 +182,7 @@ app.post("/user/plus", (req, res) => {
   })
 });
 
+//게시글 추가
 app.post("/community/plus", (req, res) => {
   const user_userName = req.body.frontUser_userName;
   console.log(user_userName);
@@ -196,6 +207,7 @@ app.post("/community/plus", (req, res) => {
   );
 });
 
+//게시글 댓글 추가
 app.post("/community_dat/plus", (req, response) => {
   const user_userName = req.body.frontUser_userName;
   console.log(user_userName);
@@ -220,6 +232,7 @@ app.post("/community_dat/plus", (req, response) => {
   );
 });
 
+//qna글 추가
 app.post("/qna/plus", (req, res) => {
   const user_userName = req.body.frontUser_userName;
   console.log(user_userName);
@@ -244,6 +257,7 @@ app.post("/qna/plus", (req, res) => {
   );
 });
 
+//qna댓글 추가
 app.post("/qna_dat/plus", (req, response) => {
   const user_level = req.body.frontUser_level;
   const user_userName = req.body.frontUser_userName;
@@ -269,6 +283,7 @@ app.post("/qna_dat/plus", (req, response) => {
   );
 });
 
+//거래 추가
 app.post("/transaction/plus", (req, response) => {
   const seller_userName = req.body.frontSeller_userName;
   const reptile_species = req.body.frontReptile_species;
@@ -289,6 +304,7 @@ app.post("/transaction/plus", (req, response) => {
   );
 });
 
+//유저 삭제
 app.delete("/user/delete", (req, res) => {
   const id = req.body.frontId;
   connection.query(
@@ -304,6 +320,7 @@ app.delete("/user/delete", (req, res) => {
   )
 })
 
+//게시글 삭제
 app.delete("/community/delete", (req, res) => {
   //res.header("Access-Control-Allow-Origin", "*");
   const c_id = req.body.frontC_id;
@@ -321,6 +338,7 @@ app.delete("/community/delete", (req, res) => {
   )
 });
 
+//게시글 댓글 삭제
 app.delete("/community_dat/delete", (req, res) => {
   //res.header("Access-Control-Allow-Origin", "*");
   const c_d_id = req.body.frontC_d_id;
@@ -338,6 +356,7 @@ app.delete("/community_dat/delete", (req, res) => {
   )
 });
 
+//qna글 삭제
 app.delete("/qna/delete", (req, res) => {
   //res.header("Access-Control-Allow-Origin", "*");
   const q_id = req.body.frontQ_id;
@@ -355,6 +374,7 @@ app.delete("/qna/delete", (req, res) => {
   )
 });
 
+//qna 댓글 삭제
 app.delete("/qna_dat/delete", (req, res) => {
   //res.header("Access-Control-Allow-Origin", "*");
   const q_d_id = req.body.frontQ_d_id;
@@ -372,6 +392,7 @@ app.delete("/qna_dat/delete", (req, res) => {
   )
 });
 
+//거래 삭제
 app.delete("/transaction/delete", (req, res) => {
   //res.header("Access-Control-Allow-Origin", "*");
   const t_id = req.body.frontT_id;
@@ -389,6 +410,7 @@ app.delete("/transaction/delete", (req, res) => {
   )
 });
 
+//유저 정보 update
 app.post("/user/update", (req, res) => {
   const id = req.body.frontId;
   const userName = req.body.frontUserName;
@@ -407,6 +429,7 @@ app.post("/user/update", (req, res) => {
   })
 })
 
+//게시글 update
 app.post("/community/update", (req, res) => {
   const c_id = req.body.frontC_id;
   const c_title = req.body.frontC_title;
@@ -427,6 +450,7 @@ app.post("/community/update", (req, res) => {
   )
 });
 
+//qna update
 app.post("/qna/update", (req, res) => {
   const q_id = req.body.frontQ_id;
   const q_title = req.body.frontQ_title;
@@ -447,6 +471,7 @@ app.post("/qna/update", (req, res) => {
   )
 });
 
+//거래 update
 app.post("/transaction/update", (req, res) => {
   const t_id = req.body.frontT_id;
   const buyer_userName = req.body.frontBuyer_userName;
@@ -466,6 +491,7 @@ app.post("/transaction/update", (req, res) => {
   )
 });
 
+//게시글 검색
 app.post("/community/search", (req, res) => {
   const search = req.body.frontSearch;
 
@@ -481,6 +507,7 @@ app.post("/community/search", (req, res) => {
   )
 });
 
+//qna글 검색
 app.post("/qna/search", (req, res) => {
   const search = req.body.frontSearch;
 
