@@ -4,8 +4,8 @@ const dbconfig   = require('./config/database.js');
 const connection = mysql.createConnection(dbconfig);
 const cors    = require("cors");
 const bodyParser = require('body-parser');
-let userName = "sncho";
-let user_id = 1;
+//let userName = "sncho";
+//let user_id = 1;
 
 const app = express();
 
@@ -134,7 +134,7 @@ app.post('/qna_dat/get', (req, res) => {
   })
 });
 
-app.get('/transcaction', (req, res) => {
+app.get('/transaction', (req, res) => {
   connection.query('SELECT * from transaction', (error, rows) => {
     if (error) throw error;
     console.log('transaction: ', rows);
@@ -142,10 +142,10 @@ app.get('/transcaction', (req, res) => {
   });
 });
 
-app.post('/qna_dat/get', (req, res) => {
-  const q_id = req.body.frontQ_id;
-  connection.query('select * from qna_dat where q_id=?',
-  [q_id],
+app.post('/transaction/get', (req, res) => {
+  const t_id = req.body.frontT_id;
+  connection.query('select * from transaction where t_id=?',
+  [t_id],
   (err, response) => {
     if(err) {
       console.log(err);
@@ -276,7 +276,7 @@ app.post("/transaction/plus", (req, response) => {
   const createDate = req.body.frontCreateDate;
 
   connection.query(
-    "INSERT INTO community_dat (seller_userName, reptile_species, price, createDate) VALUES (?,?,?,?)",
+    "INSERT INTO transaction (seller_userName, reptile_species, price, createDate) VALUES (?,?,?,?)",
     [seller_userName, reptile_species, price, createDate],
     //콜백함수
     (err, res) => {
@@ -376,7 +376,7 @@ app.delete("/transaction/delete", (req, res) => {
   //res.header("Access-Control-Allow-Origin", "*");
   const t_id = req.body.frontT_id;
   connection.query(
-    "Delete from community where t_id=?;",
+    "Delete from transaction where t_id=?;",
     [t_id],
     (err, respose) => {
       if(err) {
@@ -453,7 +453,7 @@ app.post("/transaction/update", (req, res) => {
   const completeDate = req.body.frontCompleteDate;
 
   connection.query(
-    "update community set buyer_userName=?, completeDate=?, where t_id=?",
+    "update transaction set buyer_userName=?, completeDate=?, where t_id=?",
     [buyer_userName, completeDate, t_id],
     (err, response) => {
       if(err) {
