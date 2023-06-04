@@ -166,13 +166,14 @@ app.post('/transaction/get', (req, res) => {
 
 //유저 추가
 app.post("/user/plus", (req, res) => {
+  const name = req.body.frontName;
   const userName = req.body.frontUserName;
   const userPassword = req.body.frontUserPassword;
   const user_level = req.body.frontUser_level;
   const user_email = req.body.frontUser_email;
 
-  connection.query("Insert into user (userName, userPassword, user_level, user_email) VALUES (?,?,?,?)",
-  [userName, userPassword, user_level, user_email],
+  connection.query("Insert into user (name, userName, userPassword, user_level, user_email) VALUES (?,?,?,?,?)",
+  [name, userName, userPassword, user_level, user_email],
   (err, response) => {
     if(err) {
       console.log(err);
@@ -286,13 +287,14 @@ app.post("/qna_dat/plus", (req, response) => {
 //거래 추가
 app.post("/transaction/plus", (req, response) => {
   const seller_userName = req.body.frontSeller_userName;
+  const seller_phone = req.body.frontSeller_phone;
   const reptile_species = req.body.frontReptile_species;
   const price = req.body.frontPrice;
   const createDate = req.body.frontCreateDate;
 
   connection.query(
-    "INSERT INTO transaction (seller_userName, reptile_species, price, createDate) VALUES (?,?,?,?)",
-    [seller_userName, reptile_species, price, createDate],
+    "INSERT INTO transaction (seller_userName, seller_phone, reptile_species, price, createDate) VALUES (?,?,?,?,?)",
+    [seller_userName, seller_phone, reptile_species, price, createDate],
     //콜백함수
     (err, res) => {
       if (err) {
