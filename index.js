@@ -169,11 +169,12 @@ app.post("/user/plus", (req, res) => {
   const name = req.body.frontName;
   const userName = req.body.frontUserName;
   const userPassword = req.body.frontUserPassword;
+  const phone_num = req.body.frontPhone_num;
   const user_level = req.body.frontUser_level;
   const user_email = req.body.frontUser_email;
 
-  connection.query("Insert into user (name, userName, userPassword, user_level, user_email) VALUES (?,?,?,?,?)",
-  [name, userName, userPassword, user_level, user_email],
+  connection.query("Insert into user (name, userName, userPassword, phone_num, user_level, user_email) VALUES (?,?,?,?,?,?)",
+  [name, userName, userPassword, phone_num, user_level, user_email],
   (err, response) => {
     if(err) {
       console.log(err);
