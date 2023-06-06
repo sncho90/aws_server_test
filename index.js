@@ -62,7 +62,7 @@ app.get('/community', (req, res) => {
 app.get('/community_dat', (req, res) => {
   connection.query('SELECT * from community_dat', (error, rows) => {
     if (error) throw error;
-    console.log('User info is: ', rows);
+    console.log('community datgul info is: ', rows);
     res.send(rows);
   });
 });
@@ -99,7 +99,7 @@ app.post('/community_dat/get', (req, res) => {
 app.get('/qna', (req, res) => {
   connection.query('SELECT * from qna', (error, rows) => {
     if (error) throw error;
-    console.log('community info is: ', rows);
+    console.log('qna info is: ', rows);
     res.send(rows);
   });
 });
