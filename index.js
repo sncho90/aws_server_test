@@ -179,7 +179,8 @@ app.post("/user/plus", (req, res) => {
     if(err) {
       console.log(err);
     } else {
-      console.log("value inserted")
+      console.log("value inserted");
+      res.send(response);
     }
   })
 });
