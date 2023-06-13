@@ -4,10 +4,48 @@ const dbconfig   = require('./config/database.js');
 const connection = mysql.createConnection(dbconfig);
 const cors    = require("cors");
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const multer = require('multer');
 //let userName = "sncho";
 //let user_id = 1;
 
 const app = express();
+
+try {
+  fs.readdirSync('uploads'); // 폴더 확인
+} catch(err) {
+  console.error('uploads 폴더가 없습니다. 폴더를 생성합니다.');
+fs.mkdirSync('uploads'); // 폴더 생성
+}
+
+const FileFilter = (req, file, cb) => {
+const typeArray = file.mimetype.split('/');
+const fileType = typeArray[1];
+
+if (fileType == 'jpg' || fileType == 'png' || fileType == 'jpeg' || fileType == 'gif' || fileType == 'wwebp') {
+  req.fileValidationError = null;
+  console.log(fileType)
+  cb(null, true);
+} else {
+  req.fileValidationError = "jpg,jpeg,png,gif,webp 파일만 업로드 가능합니다.";
+  console.log("jpg,jpeg,png,gif,webp 파일만 업로드 가능합니다. ",fileType)
+  cb(null, false)
+}
+}
+
+const upload = multer({
+storage: multer.diskStorage({ // 저장한공간 정보 : 하드디스크에 저장
+  destination: process.env.UPLOAD_DIR || 'uploads/',
+  filename(req, file, cb) { // 파일명을 어떤 이름으로 올릴지
+      console.log('clear_hear1')
+      const ext = path.extname(file.originalname); // 파일의 확장자
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext); // 파일이름 + 날짜 + 확장자이름으로 저장
+      console.log('clear_hear2')
+  }
+}),
+fileFilter : FileFilter,
+limits: { fileSize: 10 * 1024 * 1024,files: 10,parts: 10 } // 5메가로 용량 제한
+});
 
 // configuration =========================
 app.set('port', process.env.PORT || 3000);
@@ -33,6 +71,114 @@ app.get('/user', (req, res) => {
     res.send(rows);
     }
   });
+});
+
+//짐승 이미지 추가 여러개
+app.post('/transaction/img/plus_multi', upload.array('files'), async (req, res) => {
+  console.log('animal adjust image');
+  console.log(req.body);
+  const files = req.files;
+  const t_id = req.body.frontT_id;
+
+  // 업로드된 이미지 파일들
+  const imagePaths = [];
+  try {
+      for (const file of files) {
+              const imagePath = file.path; // 이미지 파일 경로
+              imagePaths.push(imagePath);
+              console.log(file.path)
+              // 이미지 정보를 데이터베이스에 저장
+              connection.query('insert into t_img (img_path, t_id) values (?,?)',
+              [file.path, t_id],
+              (err, response) => {
+                      if(err) {
+                              console.log(err);
+                              res.send(err);
+                      } else {
+                              console.log(response);
+                              res.send(response);
+                      }
+              });
+      }
+
+      res.status(200).json({ success: true, imagePaths });
+      } catch (err) {
+              res.status(500).send('Server error');
+              console.log('Error:', err);
+      }
+});
+
+//짐승 이미지 추가 1개
+app.post('/api/diary/animal/image', upload.single('file'), async (req, res) => {
+  console.log('animal adjust image');
+  console.log(req.body);
+  console.log(req.file)
+  const file = req.file
+  const t_id = req.body.frontT_id;
+
+  //console.log(id, animal_name, file)
+  // 업로드된 이미지 파일들
+  const imagePaths = [];
+
+  try {
+  const imagePath = file.path; // 이미지 파일 경로
+  imagePaths.push(imagePath);
+  console.log(file.path)
+  // 이미지 정보를 데이터베이스에 저장
+  connection.query('insert into t_img (img_path, t_id) values (?,?)',
+      [file.path, t_id],
+      (err, response) => {
+              if(err) {
+                      console.log(err);
+                      res.send(err);
+              } else {
+                      console.log(response);
+                      res.send(response);
+              }
+     });
+
+
+    //res.status(200).json({ success: true, imagePaths });
+  } catch (err) {
+    res.status(500).send('Server error');
+    console.log('Error:', err);
+  }
+});
+
+// 짐승 이미지 불러오기
+app.post('/api/diary/animal/images', async (req, res) => {
+  console.log('try get image');
+  //console.log(req.query);
+  const t_id = req.body.frontT_id;
+      let img_path;
+
+  try {
+          connection.query('select img_path from t_img where t_id = ?', [t_id],
+          (err, response)=> {
+              if(err) {
+                      console.log(err);
+                      res.send(err);
+              } else {
+                      console.log("img load");
+                      res.send(response);
+                      img_path = response;
+              }
+          })
+          //console.log()
+          const data = await fs.promises.readFile(img_path);
+          //images.push(data);
+
+          // 이미지 MIME 타입 설정
+          res.setHeader('Content-Type', 'image/jpeg');
+
+          res.write(image);
+
+          res.end();
+      } catch (err) {
+      res.status(501).send('mongo error in find id');
+      console.log('mongo error in find id', err);
+      return;
+  }
 });
 
 /*(app.post('/userName', (req, res) => {
