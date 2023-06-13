@@ -25,9 +25,13 @@ app.use(express.urlencoded({ extended: false }))
 
 app.get('/user', (req, res) => {
   connection.query('SELECT * from user', (error, rows) => {
-    if (error) throw error;
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
     console.log('User info is: ', rows);
     res.send(rows);
+    }
   });
 });
 
@@ -43,27 +47,39 @@ app.get('/user', (req, res) => {
   connection.query('SELECT id from user where userName = ?',
   [userName], 
   (error, rows) => {
-    if (error) throw error;
+    if (error)  {
+      console.log(err);
+      res.send(err);
+    } else {
     console.log('user_id is: ', rows);
     res.send(rows);
+    }
   });
 });*/
 
 //게시글 전부 불러오기
 app.get('/community', (req, res) => {
   connection.query('SELECT * from community', (error, rows) => {
-    if (error) throw error;
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
     console.log('community info is: ', rows);
     res.send(rows);
+    }
   });
 });
 
 //게시글 댓글 전부 불러오기
 app.get('/community_dat', (req, res) => {
   connection.query('SELECT * from community_dat', (error, rows) => {
-    if (error) throw error;
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
     console.log('community datgul info is: ', rows);
     res.send(rows);
+    }
   });
 });
 
@@ -72,11 +88,12 @@ app.post('/community/detail', (req, res) => {
   const c_id = req.body.frontC_id;
   connection.query('select * from community where c_id=?',
   [c_id],
-  (err, response) => {
+  (err, rows) => {
     if(err) {
       console.log(err);
+      res.send(err);
     } else {
-      res.send("detail sended.");
+      res.send(rows);
     }
   })
 });
@@ -86,11 +103,12 @@ app.post('/community_dat/get', (req, res) => {
   const c_id = req.body.frontC_id;
   connection.query('select * from community_dat where c_id=?',
   [c_id],
-  (err, response) => {
+  (err, rows) => {
     if(err) {
       console.log(err);
+      res.send(err);
     } else {
-      res.send("datgul sended.");
+      res.send(rows);
     }
   })
 });
@@ -98,9 +116,13 @@ app.post('/community_dat/get', (req, res) => {
 //qna전부 불러오기
 app.get('/qna', (req, res) => {
   connection.query('SELECT * from qna', (error, rows) => {
-    if (error) throw error;
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
     console.log('qna info is: ', rows);
     res.send(rows);
+    }
   });
 });
 
@@ -109,11 +131,12 @@ app.post('/qna/detail', (req, res) => {
   const q_id = req.body.frontQ_id;
   connection.query('select * from qna where q_id=?',
   [q_id],
-  (err, response) => {
+  (err, rows) => {
     if(err) {
       console.log(err);
+      res.send(err);
     } else {
-      res.send("detail sended.");
+      res.send(rows);
     }
   })
 });
@@ -121,9 +144,13 @@ app.post('/qna/detail', (req, res) => {
 //qna 댓글 전부 불러오기
 app.get('/qna_dat', (req, res) => {
   connection.query('SELECT * from qna_dat', (error, rows) => {
-    if (error) throw error;
+    if (error)  {
+      console.log(err);
+      res.send(err);
+    } else {
     console.log('qna: ', rows);
     res.send(rows);
+    }
   });
 });
 
@@ -132,11 +159,12 @@ app.post('/qna_dat/get', (req, res) => {
   const q_id = req.body.frontQ_id;
   connection.query('select * from qna_dat where q_id=?',
   [q_id],
-  (err, response) => {
+  (err, rows) => {
     if(err) {
       console.log(err);
+      res.send(err);
     } else {
-      res.send("datgul sended.");
+      res.send(rows);
     }
   })
 });
@@ -144,9 +172,13 @@ app.post('/qna_dat/get', (req, res) => {
 //거래 전부 불러오기
 app.get('/transaction', (req, res) => {
   connection.query('SELECT * from transaction', (error, rows) => {
-    if (error) throw error;
+    if (error)  {
+      console.log(err);
+      res.send(err);
+    } else {
     console.log('transaction: ', rows);
     res.send(rows);
+    }
   });
 });
 
@@ -155,11 +187,12 @@ app.post('/transaction/get', (req, res) => {
   const t_id = req.body.frontT_id;
   connection.query('select * from transaction where t_id=?',
   [t_id],
-  (err, response) => {
+  (err, rows) => {
     if(err) {
       console.log(err);
+      res.send(err);
     } else {
-      res.send("datgul sended.");
+      res.send(rows);
     }
   })
 });
@@ -178,8 +211,9 @@ app.post("/user/plus", (req, res) => {
   (err, response) => {
     if(err) {
       console.log(err);
+      res.send(err);
     } else {
-      console.log("value inserted");
+      console.log("user inserted");
       res.send(response);
     }
   })
@@ -203,8 +237,10 @@ app.post("/community/plus", (req, res) => {
     (err, response) => {
       if (err) {
         console.log(err);
+        res.send(err);
       } else {
-        res.send("value Inserted");
+        console.log("community inserted");
+        res.send(response);
       }
     }
   );
@@ -228,8 +264,10 @@ app.post("/community_dat/plus", (req, response) => {
     (err, res) => {
       if (err) {
         console.log(err);
+        res.send(err);
       } else {
-        response.send("value Inserted");
+        response.send("community_dat Inserted");
+        response.send(res);
       }
     }
   );
@@ -253,8 +291,10 @@ app.post("/qna/plus", (req, res) => {
     (err, response) => {
       if (err) {
         console.log(err);
+        res.send(err);
       } else {
-        res.send("value Inserted");
+        console.log("qna inserted");
+        res.send(response);
       }
     }
   );
@@ -272,19 +312,42 @@ app.post("/qna_dat/plus", (req, response) => {
   const q_d_date = req.body.frontQ_d_date;
   console.log(q_d_date);
 
+  if(user_level == 1)
+    response.send(false);
+  else {
+    connection.query(
+      "INSERT INTO community_dat (qna_q_id, user_userName, q_d_contents, q_d_date) VALUES (?,?,?,?)",
+      [qna_q_id, user_userName, q_d_contents, q_d_date],
+      //콜백함수
+      (err, res) => {
+        if (err) {
+          console.log(err);
+          res.send(err);
+        } else {
+          console.log("qna_dat inserted");
+          response.send(res);
+        }
+      }
+    )
+  }
+});
+
+app.post("/userphone_num", (req, res) => {
+  const userName = req.body.frontUserName;
+
   connection.query(
-    "INSERT INTO community_dat (qna_q_id, user_userName, q_d_contents, q_d_date) VALUES (?,?,?,?)",
-    [qna_q_id, user_userName, q_d_contents, q_d_date],
-    //콜백함수
-    (err, res) => {
-      if (err) {
+    "Select phone_num from user where userName = ?", [userName],
+    (err, response) => {
+      if(err) {
         console.log(err);
+        res.send(err);
       } else {
-        response.send("value Inserted");
+        console.log(response);
+        res.send(response);
       }
     }
-  );
-});
+  )
+})
 
 //거래 추가
 app.post("/transaction/plus", (req, response) => {
@@ -301,8 +364,10 @@ app.post("/transaction/plus", (req, response) => {
     (err, res) => {
       if (err) {
         console.log(err);
+        res.send(err);
       } else {
-        response.send("value Inserted");
+        console.log("transaction inserted");
+        response.send(res);
       }
     }
   );
@@ -316,9 +381,11 @@ app.delete("/user/delete", (req, res) => {
     (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value deleted");
+        console.log("user deleted");
+        res.send(response);
       }
     }
   )
@@ -331,12 +398,14 @@ app.delete("/community/delete", (req, res) => {
   connection.query(
     "Delete from community where c_id=?;",
     [c_id],
-    (err, respose) => {
+    (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value deleted");
+        console.log("community deleted");
+        res.send(response);
       }
     }
   )
@@ -349,12 +418,14 @@ app.delete("/community_dat/delete", (req, res) => {
   connection.query(
     "Delete from community where c_d_id=?;",
     [c_d_id],
-    (err, respose) => {
+    (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value deleted");
+        console.log("community_dat deleted");
+        res.send(response);
       }
     }
   )
@@ -367,12 +438,14 @@ app.delete("/qna/delete", (req, res) => {
   connection.query(
     "Delete from community where q_id=?;",
     [q_id],
-    (err, respose) => {
+    (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value deleted");
+        console.log("qna deleted");
+        res.send(response);
       }
     }
   )
@@ -385,12 +458,14 @@ app.delete("/qna_dat/delete", (req, res) => {
   connection.query(
     "Delete from community where q_d_id=?;",
     [q_d_id],
-    (err, respose) => {
+    (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value deleted");
+        console.log("qna_dat deleted");
+        res.send(response);
       }
     }
   )
@@ -403,12 +478,14 @@ app.delete("/transaction/delete", (req, res) => {
   connection.query(
     "Delete from transaction where t_id=?;",
     [t_id],
-    (err, respose) => {
+    (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value deleted");
+        console.log("transaction deleted");
+        res.send(response);
       }
     }
   )
@@ -427,8 +504,10 @@ app.post("/user/update", (req, res) => {
   (err, response) => {
     if(err) {
       console.log(err);
+      res.send(err);
     } else {
-      console.log("value updated");
+      console.log("user updated");
+      res.send(response);
     }
   })
 })
@@ -446,9 +525,11 @@ app.post("/community/update", (req, res) => {
     (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value updated");
+        console.log("community updated");
+        res.send(response);
       }
     }
   )
@@ -467,9 +548,11 @@ app.post("/qna/update", (req, res) => {
     (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value updated");
+        console.log("qna updated");
+        res.send(response);
       }
     }
   )
@@ -487,9 +570,11 @@ app.post("/transaction/update", (req, res) => {
     (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       }
       else {
-        res.send("value updated");
+        console.log("transaction updated");
+        res.send(response);
       }
     }
   )
@@ -504,8 +589,10 @@ app.post("/community/search", (req, res) => {
     (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       } else {
-        res.send("search completed");
+        res.send(response);
+        console.log(response);
       }
     }
   )
@@ -520,8 +607,10 @@ app.post("/qna/search", (req, res) => {
     (err, response) => {
       if(err) {
         console.log(err);
+        res.send(err);
       } else {
-        res.send("search completed");
+        res.send(response);
+        console.log(response);
       }
     }
   )
