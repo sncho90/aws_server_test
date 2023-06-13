@@ -229,6 +229,21 @@ app.get('/community_dat', (req, res) => {
   });
 });
 
+//특정게시글 불러오기(get)
+app.get('/community/:c_id', (req, res) => {
+  const c_id = req.params.c_id;
+  console.log(c_id);
+  connection.query('SELECT * from community where c_id = ?',[c_id], (error, rows) => {
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
+    console.log('community info is: ', rows);
+    res.send(rows);
+    }
+  });
+});
+
 //특정 게시물 보기
 app.post('/community/detail', (req, res) => {
   const c_id = req.body.frontC_id;
@@ -242,6 +257,21 @@ app.post('/community/detail', (req, res) => {
       res.send(rows);
     }
   })
+});
+
+//특정게시글의 댓글 불러오기(get)
+app.get('/community_dat/:c_id', (req, res) => {
+  const c_id = req.params.c_id;
+  console.log(c_id);
+  connection.query('SELECT * from community_dat where c_id = ?',[c_id], (error, rows) => {
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
+    console.log('community info is: ', rows);
+    res.send(rows);
+    }
+  });
 });
 
 //특정 게시물의 댓글들 보기
@@ -272,6 +302,21 @@ app.get('/qna', (req, res) => {
   });
 });
 
+//특정qna 불러오기(get)
+app.get('/qna/:q_id', (req, res) => {
+  const q_id = req.params.q_id;
+  console.log(q_id);
+  connection.query('SELECT * from qna where q_id = ?',[q_id], (error, rows) => {
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
+    console.log('community info is: ', rows);
+    res.send(rows);
+    }
+  });
+});
+
 //특정 qna글 보기
 app.post('/qna/detail', (req, res) => {
   const q_id = req.body.frontQ_id;
@@ -285,6 +330,21 @@ app.post('/qna/detail', (req, res) => {
       res.send(rows);
     }
   })
+});
+
+//특정qna의 댓글 불러오기(get)
+app.get('/qna/:q_id', (req, res) => {
+  const q_id = req.params.q_id;
+  console.log(q_id);
+  connection.query('SELECT * from qna_dat where q_id = ?',[q_id], (error, rows) => {
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
+    console.log('community info is: ', rows);
+    res.send(rows);
+    }
+  });
 });
 
 //qna 댓글 전부 불러오기
@@ -323,6 +383,21 @@ app.get('/transaction', (req, res) => {
       res.send(err);
     } else {
     console.log('transaction: ', rows);
+    res.send(rows);
+    }
+  });
+});
+
+//특정거래 불러오기(get)
+app.get('/transaction/:t_id', (req, res) => {
+  const t_id = req.params.t_id;
+  console.log(t_id);
+  connection.query('SELECT * from qna_dat where t_id = ?',[t_id], (error, rows) => {
+    if (error) {
+      console.log(err);
+      res.send(err);
+    } else {
+    console.log('community info is: ', rows);
     res.send(rows);
     }
   });
