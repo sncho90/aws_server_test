@@ -62,8 +62,8 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false })) 
 
 app.get('/user', (req, res) => {
-  connection.query('SELECT * from user', (error, rows) => {
-    if (error) {
+  connection.query('SELECT * from user', (err, rows) => {
+    if (err) {
       console.log(err);
       res.send(err);
     } else {
@@ -109,7 +109,7 @@ app.post('/transaction/img/plus_multi', upload.array('files'), async (req, res) 
 });
 
 //짐승 이미지 추가 1개
-app.post('/api/diary/animal/image', upload.single('file'), async (req, res) => {
+app.post('/transaction/img/plus', upload.single('file'), async (req, res) => {
   console.log('animal adjust image');
   console.log(req.body);
   console.log(req.file)
@@ -146,7 +146,7 @@ app.post('/api/diary/animal/image', upload.single('file'), async (req, res) => {
 });
 
 // 짐승 이미지 불러오기
-app.post('/api/diary/animal/images', async (req, res) => {
+app.post('/transaction/img/get', async (req, res) => {
   console.log('try get image');
   //console.log(req.query);
   const t_id = req.body.frontT_id;
@@ -205,8 +205,8 @@ app.post('/api/diary/animal/images', async (req, res) => {
 
 //게시글 전부 불러오기
 app.get('/community', (req, res) => {
-  connection.query('SELECT * from community', (error, rows) => {
-    if (error) {
+  connection.query('SELECT * from community', (err, rows) => {
+    if (err) {
       console.log(err);
       res.send(err);
     } else {
@@ -220,8 +220,8 @@ app.get('/community', (req, res) => {
 app.get('/community_dat', (req, res) => {
   connection.query('SELECT * from community_dat', (error, rows) => {
     if (error) {
-      console.log(err);
-      res.send(err);
+      console.log(error);
+      res.send(error);
     } else {
     console.log('community datgul info is: ', rows);
     res.send(rows);
@@ -235,8 +235,8 @@ app.get('/community/:c_id', (req, res) => {
   console.log(c_id);
   connection.query('SELECT * from community where c_id = ?',[c_id], (error, rows) => {
     if (error) {
-      console.log(err);
-      res.send(err);
+      console.log(error);
+      res.send(error);
     } else {
     console.log('community info is: ', rows);
     res.send(rows);
@@ -255,6 +255,8 @@ app.post('/community/detail', (req, res) => {
       res.send(err);
     } else {
       res.send(rows);
+      console.log(req);
+      console.log(rows);
     }
   })
 });
@@ -263,10 +265,10 @@ app.post('/community/detail', (req, res) => {
 app.get('/community_dat/:c_id', (req, res) => {
   const c_id = req.params.c_id;
   console.log(c_id);
-  connection.query('SELECT * from community_dat where c_id = ?',[c_id], (error, rows) => {
+  connection.query('SELECT * from community_dat where community_c_id = ?',[c_id], (error, rows) => {
     if (error) {
-      console.log(err);
-      res.send(err);
+      console.log(error);
+      res.send(error);
     } else {
     console.log('community info is: ', rows);
     res.send(rows);
@@ -291,8 +293,8 @@ app.post('/community_dat/get', (req, res) => {
 
 //qna전부 불러오기
 app.get('/qna', (req, res) => {
-  connection.query('SELECT * from qna', (error, rows) => {
-    if (error) {
+  connection.query('SELECT * from qna', (err, rows) => {
+    if (err) {
       console.log(err);
       res.send(err);
     } else {
@@ -306,12 +308,12 @@ app.get('/qna', (req, res) => {
 app.get('/qna/:q_id', (req, res) => {
   const q_id = req.params.q_id;
   console.log(q_id);
-  connection.query('SELECT * from qna where q_id = ?',[q_id], (error, rows) => {
-    if (error) {
+  connection.query('SELECT * from qna where q_id = ?',[q_id], (err, rows) => {
+    if (err) {
       console.log(err);
-      res.send(err);
+      res.send(error);
     } else {
-    console.log('community info is: ', rows);
+    console.log('qna info is: ', rows);
     res.send(rows);
     }
   });
@@ -333,15 +335,15 @@ app.post('/qna/detail', (req, res) => {
 });
 
 //특정qna의 댓글 불러오기(get)
-app.get('/qna/:q_id', (req, res) => {
+app.get('/qna_dat/:q_id', (req, res) => {
   const q_id = req.params.q_id;
   console.log(q_id);
-  connection.query('SELECT * from qna_dat where q_id = ?',[q_id], (error, rows) => {
+  connection.query('SELECT * from qna_dat where qna_q_id = ?',[q_id], (error, rows) => {
     if (error) {
-      console.log(err);
-      res.send(err);
+      console.log(error);
+      res.send(error);
     } else {
-    console.log('community info is: ', rows);
+    console.log('qna_dat info is: ', rows);
     res.send(rows);
     }
   });
@@ -349,8 +351,8 @@ app.get('/qna/:q_id', (req, res) => {
 
 //qna 댓글 전부 불러오기
 app.get('/qna_dat', (req, res) => {
-  connection.query('SELECT * from qna_dat', (error, rows) => {
-    if (error)  {
+  connection.query('SELECT * from qna_dat', (err, rows) => {
+    if (err)  {
       console.log(err);
       res.send(err);
     } else {
@@ -363,7 +365,7 @@ app.get('/qna_dat', (req, res) => {
 //특정 qna 댓글 보기
 app.post('/qna_dat/get', (req, res) => {
   const q_id = req.body.frontQ_id;
-  connection.query('select * from qna_dat where q_id=?',
+  connection.query('select * from qna_dat where qna_q_id=?',
   [q_id],
   (err, rows) => {
     if(err) {
@@ -377,8 +379,8 @@ app.post('/qna_dat/get', (req, res) => {
 
 //거래 전부 불러오기
 app.get('/transaction', (req, res) => {
-  connection.query('SELECT * from transaction', (error, rows) => {
-    if (error)  {
+  connection.query('SELECT * from transaction', (err, rows) => {
+    if (err)  {
       console.log(err);
       res.send(err);
     } else {
@@ -392,8 +394,8 @@ app.get('/transaction', (req, res) => {
 app.get('/transaction/:t_id', (req, res) => {
   const t_id = req.params.t_id;
   console.log(t_id);
-  connection.query('SELECT * from qna_dat where t_id = ?',[t_id], (error, rows) => {
-    if (error) {
+  connection.query('SELECT * from qna_dat where t_id = ?',[t_id], (err, rows) => {
+    if (err) {
       console.log(err);
       res.send(err);
     } else {
@@ -485,9 +487,9 @@ app.post("/community_dat/plus", (req, response) => {
     (err, res) => {
       if (err) {
         console.log(err);
-        res.send(err);
+        response.send(err);
       } else {
-        response.send("community_dat Inserted");
+        console.log("community_dat Inserted");
         response.send(res);
       }
     }
@@ -537,13 +539,13 @@ app.post("/qna_dat/plus", (req, response) => {
     response.send(false);
   else {
     connection.query(
-      "INSERT INTO community_dat (qna_q_id, user_userName, q_d_contents, q_d_date) VALUES (?,?,?,?)",
+      "INSERT INTO qna_dat (qna_q_id, user_userName, q_d_contents, q_d_date) VALUES (?,?,?,?)",
       [qna_q_id, user_userName, q_d_contents, q_d_date],
       //콜백함수
       (err, res) => {
         if (err) {
           console.log(err);
-          res.send(err);
+          response.send(err);
         } else {
           console.log("qna_dat inserted");
           response.send(res);
@@ -568,7 +570,7 @@ app.post("/userphone_num", (req, res) => {
       }
     }
   )
-})
+});
 
 //거래 추가
 app.post("/transaction/plus", (req, response) => {
@@ -585,7 +587,7 @@ app.post("/transaction/plus", (req, response) => {
     (err, res) => {
       if (err) {
         console.log(err);
-        res.send(err);
+        response.send(err);
       } else {
         console.log("transaction inserted");
         response.send(res);
