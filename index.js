@@ -394,12 +394,12 @@ app.get('/transaction', (req, res) => {
 app.get('/transaction/:t_id', (req, res) => {
   const t_id = req.params.t_id;
   console.log(t_id);
-  connection.query('SELECT * from qna_dat where t_id = ?',[t_id], (err, rows) => {
+  connection.query('SELECT * from transaction where t_id = ?',[t_id], (err, rows) => {
     if (err) {
       console.log(err);
       res.send(err);
     } else {
-    console.log('community info is: ', rows);
+    console.log('transaction info is: ', rows);
     res.send(rows);
     }
   });
