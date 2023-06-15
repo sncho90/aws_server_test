@@ -576,20 +576,21 @@ app.post("/userphone_num", (req, res) => {
 app.post("/transaction/plus", (req, response) => {
   const seller_userName = req.body.frontSeller_userName;
   const seller_phone = req.body.frontSeller_phone;
+  const t_site = req.body.frontT_site;
   const reptile_species = req.body.frontReptile_species;
   const price = req.body.frontPrice;
   const createDate = req.body.frontCreateDate;
 
   connection.query(
-    "INSERT INTO transaction (seller_userName, seller_phone, reptile_species, price, createDate) VALUES (?,?,?,?,?)",
-    [seller_userName, seller_phone, reptile_species, price, createDate],
+    "INSERT INTO transaction (seller_userName, seller_phone, t_site, reptile_species, price, createDate) VALUES (?,?,?,?,?,?)",
+    [seller_userName, seller_phone, t_site, reptile_species, price, createDate],
     //콜백함수
     (err, res) => {
       if (err) {
         console.log(err);
         response.send(err);
       } else {
-        console.log("transaction inserted");
+        console.log(res);
         response.send(res);
       }
     }
