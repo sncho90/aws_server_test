@@ -108,9 +108,9 @@ app.post('/transaction/img/plus_multi', upload.array('files'), async (req, res) 
       }
 });
 
-//짐승 이미지 추가 1개
+//짐승 이미지 추가 1개 거래
 app.post('/transaction/img/plus', upload.single('file'), async (req, res) => {
-  console.log('animal adjust image');
+  console.log('animal adjust image transaction');
   console.log(req.body);
   console.log(req.file)
   const file = req.file
@@ -145,15 +145,161 @@ app.post('/transaction/img/plus', upload.single('file'), async (req, res) => {
   }
 });
 
-// 짐승 이미지 불러오기
+//짐승 이미지 추가 1개 commuinity
+app.post('/community/img/plus', upload.single('file'), async (req, res) => {
+  console.log('animal adjust image community');
+  console.log(req.body);
+  console.log(req.file)
+  const file = req.file
+  const c_id = req.body.frontC_id;
+
+  //console.log(id, animal_name, file)
+  // 업로드된 이미지 파일들
+  const imagePaths = [];
+
+  try {
+  const imagePath = file.path; // 이미지 파일 경로
+  imagePaths.push(imagePath);
+  console.log(file.path)
+  // 이미지 정보를 데이터베이스에 저장
+  connection.query('insert into c_img (img_path, c_id) values (?,?)',
+      [file.path, c_id],
+      (err, response) => {
+              if(err) {
+                      console.log(err);
+                      res.send(err);
+              } else {
+                      console.log(response);
+                      res.send(response);
+              }
+     });
+
+
+    //res.status(200).json({ success: true, imagePaths });
+  } catch (err) {
+    res.status(500).send('Server error');
+    console.log('Error:', err);
+  }
+});
+
+//짐승 이미지 추가 1개 qna
+app.post('/qna/img/plus', upload.single('file'), async (req, res) => {
+  console.log('animal adjust image qna');
+  console.log(req.body);
+  console.log(req.file)
+  const file = req.file
+  const q_id = req.body.frontQ_id;
+
+  //console.log(id, animal_name, file)
+  // 업로드된 이미지 파일들
+  const imagePaths = [];
+
+  try {
+  const imagePath = file.path; // 이미지 파일 경로
+  imagePaths.push(imagePath);
+  console.log(file.path)
+  // 이미지 정보를 데이터베이스에 저장
+  connection.query('insert into q_img (img_path, q_id) values (?,?)',
+      [file.path, q_id],
+      (err, response) => {
+              if(err) {
+                      console.log(err);
+                      res.send(err);
+              } else {
+                      console.log(response);
+                      res.send(response);
+              }
+     });
+
+
+    //res.status(200).json({ success: true, imagePaths });
+  } catch (err) {
+    res.status(500).send('Server error');
+    console.log('Error:', err);
+  }
+});
+
+// 짐승 이미지 불러오기 거래
 app.post('/transaction/img/get', async (req, res) => {
-  console.log('try get image');
+  console.log('try get image transaction');
   //console.log(req.query);
   const t_id = req.body.frontT_id;
       let img_path;
 
   try {
           connection.query('select img_path from t_img where t_id = ?', [t_id],
+          (err, response)=> {
+              if(err) {
+                      console.log(err);
+                      res.send(err);
+              } else {
+                      console.log("img load");
+                      res.send(response);
+                      img_path = response;
+              }
+          })
+          //console.log()
+          const data = await fs.promises.readFile(img_path);
+          //images.push(data);
+
+          // 이미지 MIME 타입 설정
+          res.setHeader('Content-Type', 'image/jpeg');
+
+          res.write(image);
+
+          res.end();
+      } catch (err) {
+      res.status(501).send('mongo error in find id');
+      console.log('mongo error in find id', err);
+      return;
+  }
+});
+
+// 짐승 이미지 불러오기 community
+app.post('/community/img/get', async (req, res) => {
+  console.log('try get image community');
+  //console.log(req.query);
+  const c_id = req.body.frontC_id;
+      let img_path;
+
+  try {
+          connection.query('select img_path from c_img where c_id = ?', [c_id],
+          (err, response)=> {
+              if(err) {
+                      console.log(err);
+                      res.send(err);
+              } else {
+                      console.log("img load");
+                      res.send(response);
+                      img_path = response;
+              }
+          })
+          //console.log()
+          const data = await fs.promises.readFile(img_path);
+          //images.push(data);
+
+          // 이미지 MIME 타입 설정
+          res.setHeader('Content-Type', 'image/jpeg');
+
+          res.write(image);
+
+          res.end();
+      } catch (err) {
+      res.status(501).send('mongo error in find id');
+      console.log('mongo error in find id', err);
+      return;
+  }
+});
+
+// 짐승 이미지 불러오기 qna
+app.post('/qna/img/get', async (req, res) => {
+  console.log('try get image');
+  //console.log(req.query);
+  const q_id = req.body.frontQ_id;
+      let img_path;
+
+  try {
+          connection.query('select img_path from q_img where q_id = ?', [q_id],
           (err, response)=> {
               if(err) {
                       console.log(err);
