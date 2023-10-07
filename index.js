@@ -227,7 +227,7 @@ app.post('/transaction/img/get', async (req, res) => {
       let img_path;
 
   try {
-          connection.query('select img_path from t_img where t_id = ?', [t_id],
+          connection.query('select t_path from transaction where t_id = ?', [t_id],
           (err, response)=> {
               if(err) {
                       console.log(err);
@@ -263,7 +263,7 @@ app.post('/community/img/get', async (req, res) => {
       let img_path;
 
   try {
-          connection.query('select img_path from c_img where c_id = ?', [c_id],
+          connection.query('select c_path from community where c_id = ?', [c_id],
           (err, response)=> {
               if(err) {
                       console.log(err);
@@ -299,7 +299,7 @@ app.post('/qna/img/get', async (req, res) => {
       let img_path;
 
   try {
-          connection.query('select img_path from q_img where q_id = ?', [q_id],
+          connection.query('select q_path from qna where q_id = ?', [q_id],
           (err, response)=> {
               if(err) {
                       console.log(err);
