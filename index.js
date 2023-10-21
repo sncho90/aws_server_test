@@ -125,7 +125,7 @@ app.post('/transaction/img/plus', upload.single('file'), async (req, res) => {
   imagePaths.push(imagePath);
   console.log(file.path)
   // 이미지 정보를 데이터베이스에 저장
-  connection.query('insert into t_img (img_path, t_id) values (?,?)',
+  connection.query('insert into transaction (t_path, t_id) values (?,?)',
       [file.path, t_id],
       (err, response) => {
               if(err) {
